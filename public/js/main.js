@@ -5,6 +5,7 @@ $(function(){ //equivale a: $(document).ready(function()
     inicializaFrase();
     inicializaContadores();
     inicializaCronometro();
+    inicializaMarcador();
 });
 
 function inicializaFrase() {
@@ -37,9 +38,26 @@ campo.one("focus", function(){
             campo.attr("disabled", true);
             clearInterval(cronometroID);
             $("#botaoReiniciar").attr("disabled", false);
+            campo.addClass("campo-desativado");
         };
     },1000);
 });
+}
+
+function inicializaMarcador(){
+    var frase = $(".frase").text();
+    campo.on("input", function(){
+        var digitado = campo.val();
+        var comparavel = frase.substr(0, digitado.length);
+
+        if(digitado == comparavel){
+            campo.addClass("campo-correto");
+            campo.removeClass("campo-errado");
+        } else {
+            campo.addClass("campo-errado");
+            campo.removeClass("campo-correto");
+        };
+    });
 }
 
 function reiniciaJogo() {
@@ -49,5 +67,8 @@ function reiniciaJogo() {
     $("#contCaracteres").text("0");
     $("#tempoDigitacao").text(tempoInicial);
     inicializaCronometro();
+    campo.removeClass("campo-desativado"); //ao inves do addClass e removeClass podemos usar a toggleClass
+    campo.removeClass("campo-errado");
+    campo.removeClass("campo-correto");
 }
 
